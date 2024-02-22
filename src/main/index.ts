@@ -2,12 +2,14 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { MakeFetch } from '@shared/types'
+import { makeFetch } from '@/lib'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1920,
+    height: 1080,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -17,6 +19,7 @@ function createWindow(): void {
     // frame: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
+
       sandbox: true,
       contextIsolation: true
     }
@@ -44,6 +47,9 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  //IPC Handlers
+  ipcMain.handle('fetch', (_, ...args: Parameters<MakeFetch>) => makeFetch(...args))
+
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 

@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 interface ImportMetaEnv {
   readonly MAIN_VITE_LEAGUE_DEV_API_KEY: string
 }
