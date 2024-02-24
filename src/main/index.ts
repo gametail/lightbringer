@@ -10,13 +10,15 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
+    minWidth: 1280,
+    minHeight: 768,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     center: true,
     title: 'Lightbringer',
     // transparent: true,
-    // frame: false,
+    frame: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
 

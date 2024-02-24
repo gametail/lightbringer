@@ -1,6 +1,8 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import ProfileHeader from './ProfileHeader'
+import { champions } from '@renderer/data/mock-champ-data'
 
 interface IProfile {
   className?: string
@@ -25,22 +27,23 @@ type SummonerDTO = {
   summonerLevel: number
 }
 
+export const profileMockData: SummonerProfile = {
+  gameName: 'Samira',
+  tagLine: 'Combo',
+  accountId: 'llYn_nYTXzLr9xiPEkUmeOi6Qqiwi61Zw2YV9WKh2vkjQQ',
+  profileIconId: 6100,
+  revisionDate: 1708376750000,
+  name: 'Gun Goddess',
+  id: 'sUHRWIknlEJ3trbOkFY8LeSyglPttgEvOC2IyaU4iapMdBo',
+  puuid: 'vKLzr7B3wUcZZ2pmfryojxczOpK77AfL0N2AU6UrHkYbJjw_znTw6moG6WKm_H00zjdKxKZivsKFcw',
+  summonerLevel: 655
+}
+
 const Profile: React.FC<IProfile> = ({ className, debug }) => {
   const [gameNameInput, setGameNameInput] = useState('Samira')
   const [tagLineInput, setTagLineInput] = useState('Combo')
   const [puuid, setPuuid] = useState('')
   const [summoner, setSummoner] = useState<SummonerDTO | null>()
-  const [profile, setProfile] = useState<SummonerProfile>({
-    gameName: 'Samira',
-    tagLine: 'Combo',
-    accountId: 'llYn_nYTXzLr9xiPEkUmeOi6Qqiwi61Zw2YV9WKh2vkjQQ',
-    profileIconId: 6100,
-    revisionDate: 1708376750000,
-    name: 'Gun Goddess',
-    id: 'sUHRWIknlEJ3trbOkFY8LeSyglPttgEvOC2IyaU4iapMdBo',
-    puuid: 'vKLzr7B3wUcZZ2pmfryojxczOpK77AfL0N2AU6UrHkYbJjw_znTw6moG6WKm_H00zjdKxKZivsKFcw',
-    summonerLevel: 655
-  })
 
   const getUrl = (regionPrefix: RegionPrefix, path: string) => {
     const base = 'api.riotgames.com'
@@ -94,56 +97,26 @@ const Profile: React.FC<IProfile> = ({ className, debug }) => {
   useEffect(() => {}, [])
 
   return (
-    <div className={twMerge('w-full h-full px-24 relative overflow-auto', className)}>
-      <div className="absolute top-0 right-0 p-10 join">
-        <input
-          type="text"
-          className="text-center input input-bordered join-item"
-          placeholder="Name"
-          minLength={3}
-          maxLength={16}
-          pattern="[A-Za-z0-9]+"
-          value={gameNameInput}
-          onChange={(ev) => setGameNameInput(ev.target.value)}
-        />
-        <div className="text-xl text-white btn btn-disabled join-item">#</div>
+    <div className={twMerge('', className)}>
+      {/* <div className="fixed top-0 left-0 w-full h-full bg-blend-overlay bg-gradient-to-r from-neutral from-10% via-neutral/20 to-neutral to-90%"></div> */}
 
-        <input
-          type="text"
-          className="text-center input input-bordered max-w-32 join-item"
-          placeholder="Tag Line"
-          minLength={2}
-          maxLength={5}
-          pattern="[A-Za-z0-9]+"
-          value={tagLineInput}
-          onChange={(ev) => setTagLineInput(ev.target.value)}
-        />
-      </div>
+      <section
+        style={{
+          backgroundImage: `url(https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champions[Math.floor(Math.random() * champions.length)]}_${0}.jpg)`
+          // backgroundImage: `url(https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champions[120]}_${0}.jpg)`
+        }}
+        className="flex flex-col h-full overflow-auto bg-[center_top_8rem] 2xl:bg-[top_8rem_left_320px] bg-fixed bg-no-repeat bg-contain rounded-3xl bg-blend-overlay"
+      >
+        <div className="fixed inset-0 h-screen bg-gradient-radial from-30% from-base-100/50 to-base-100 to-70%"></div>
+        <ProfileHeader className="z-40 " />
 
-      <div className="flex items-center gap-4 mx-20 my-10 ">
-        {/* Icon and Level*/}
-        <div className="select-none avatar indicator">
-          <span className="h-8 text-xl font-bold indicator-item indicator-bottom indicator-center badge badge-primary">
-            {profile.summonerLevel}
-          </span>
-          <div className="w-40 rounded-full ring-4 ring-primary ring-offset-base-100 ring-offset-4">
-            <img
-              src={`https://ddragon.leagueoflegends.com/cdn/14.4.1/img/profileicon/${profile.profileIconId}.png`}
-              alt="summoner icon"
-            />
+        <div className="z-40 flex w-full min-h-full gap-4 h-fit bg-base-100">
+          <div className="flex-auto border border-green-500 min-w-[680px] rounded-3xl">
+            Match History
           </div>
+          <div className="border border-blue-500 min-w-80 rounded-3xl">Stats</div>
         </div>
-        {/* Gamename and Tagline */}
-        <h1 className="my-4 text-6xl font-bold text-center">
-          {profile.gameName}
-          <span className="px-4 font-medium text text-secondary/40">#{profile.tagLine}</span>
-        </h1>
-      </div>
-
-      <div className="flex h-full border-2 border-red-600">
-        <div>Stats</div>
-        <div>Match History</div>
-      </div>
+      </section>
     </div>
   )
 }
